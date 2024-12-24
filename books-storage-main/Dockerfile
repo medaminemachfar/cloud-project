@@ -1,23 +1,23 @@
-# Use Node.js for building the app
-FROM node:18-alpine AS build
+# Stage 1: Build Frontend
+FROM node:18-alpine AS frontend-build
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+COPY frontend/package*.json ./frontend/
+RUN npm install --prefix frontend
+COPY frontend/ ./frontend/
+RUN npm run build --prefix frontend
 
-# Use Nginx to serve the built files
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+# Stage 2: Build Backend
+FROM node:18-alpine AS backend-build
+WORKDIR /app
+COPY backend/package*.json ./backend/
+RUN npm install --prefix backend
+COPY backend/ ./backend/
+EXPOSE 5000
+CMD ["npm", "start", "--prefix", "backend"]
+
+# Stage 3: Serve Frontend with Nginx
+FROM nginx:alpine AS nginx
+COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
-
-# Stage 2: Backend build
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 5000
-CMD ["npm", "start"]
