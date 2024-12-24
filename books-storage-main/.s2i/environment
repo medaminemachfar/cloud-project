@@ -1,3 +1,0 @@
-NPM_RUN=build
-NPM_BUILD_DIR=frontend
-NPM_CONFIG_LOGLEVEL=info
