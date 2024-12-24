@@ -1,0 +1,17 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: my-app
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/medaminemachfar/cloud-project.git
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile # Specify your Dockerfile path (if in a subdirectory, update it accordingly)
+  output:
+    to:
+      kind: ImageStreamTag
+      name: my-app:latest
