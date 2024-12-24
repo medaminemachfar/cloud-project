@@ -10,7 +10,7 @@ spec:
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: Dockerfile # Specify your Dockerfile path (if in a subdirectory, update it accordingly)
+      dockerfilePath: cloud project\books-storage-main\Dockerfile
   output:
     to:
       kind: ImageStreamTag
